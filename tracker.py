@@ -56,9 +56,10 @@ def add_transaction():
         elif choice == "2":
             add_expense()
         elif choice == "3":
-            main_menu()
+            break
         else:
             print("Invalid choice. Please try again.")
+    main_menu()
 
 
 # Add The Income.
@@ -139,12 +140,72 @@ def add_expense():
 
 
 def view_transactions():
-    print("-----------------------------------------")
-    print("|\t\t\t View Transactions \t\t\t|")
-    print("-----------------------------------------")
+    while True:
+        print("-----------------------------------------")
+        print("|\t\t\t View Transactions \t\t\t|")
+        print("-----------------------------------------")
+        print("1. Show All Income Transactions")
+        print("2. Show All Expense Transactions")
+        print("3. Back to main menu")
+        choice = input("Enter the choice: ")
+        if choice == "1":
+            view_income_transactions()
+        elif choice == "2":
+            view_expense_transactions()
+        elif choice == "3":
+            break
+        else:
+            print("Invalid choice. Please try again.")
+        main_menu()
+
+
+def view_income_transactions():
+    print("------------------------------------------------")
+    print("|\t\t\t View Income Transactions \t\t|")
+    print("------------------------------------------------")
+    for transaction in transactions:
+        if transaction[2].lower() == "income":
+            print("Amount:", transaction[0])
+            print("Category:", transaction[1])
+            print("Date:", transaction[3])
+            print("-----------------------------------------")
+
+
+def view_expense_transactions():
+    print("------------------------------------------------")
+    print("|\t\t\t View Expense Transactions \t\t|")
+    print("------------------------------------------------")
+    for transaction in transactions:
+        if transaction[2].lower() == "expense":
+            print("Amount:", transaction[0])
+            print("Category:", transaction[1])
+            print("Date:", transaction[3])
+            print("-----------------------------------------")
 
 
 def update_transaction():
+    print("-----------------------------------------")
+    print("|\t\t\t View Transactions \t\t\t|")
+    print("-----------------------------------------")
+    print("1. Update Income Transactions")
+    print("2. Update Expense Transactions")
+    print("3. Back to main menu")
+    choice = input("Enter the choice: ")
+    if choice == "1":
+        update_income_transactions()
+    elif choice == "2":
+        update_expense_transactions()
+    elif choice == "3":
+        main_menu()
+    else:
+        print("Invalid choice. Please try again.")
+
+
+def update_income_transactions():
+    pass
+
+
+def update_expense_transactions():
     pass
 
 
