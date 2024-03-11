@@ -1,4 +1,8 @@
+# import the json module
 import json
+
+# import the datetime module
+from datetime import datetime
 
 # Global List
 transactions = []
@@ -6,34 +10,38 @@ transactions = []
 
 # load all transactions
 def load_transactions():
-    # read the data in the json file
-    with open("Data.json", 'r') as f:
-        trans_data = json.load(f)
+    try:
+        with open("Data.json", "r") as f:
+            trans_data = json.load(f)  # load all transactions in the file
 
-        for x in trans_data:
-            print(x)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # If the file does not exist or contains invalid JSON data,
+        # initialize transactions as an empty list
+        trans_data = []
+
+    for x in trans_data:
+        print(x)
 
 
 # Save the transactions
 def save_transactions():
     # write the data in the json file
     with open("Data.json", "w") as f:
-        json.dump(transactions, f)
-
-# Add The Income.
-def add_income():
-    print("-----------------------------------------")
-    print("|\t\t\t Add Income \t\t\t|")
-    print("-----------------------------------------")
-    while True:
+        json.dump(transactions, f, default=str, indent=2)  # getting the string for default and indentation in 2.
 
 
+# Validations
 
-def add_expense():
-    pass
+# Date Validation
+def is_valid_date(date):
+    try:
+        datetime.strptime(date, '%Y-%m-%d')  # formatting the date
+        return True
+    except ValueError:
+        return False
 
 
-# add the transactions (main)
+# add the transactions (main function)
 def add_transaction():
     while True:
         print("-----------------------------------------")
@@ -51,11 +59,89 @@ def add_transaction():
             main_menu()
         else:
             print("Invalid choice. Please try again.")
-            main_menu()
+
+
+# Add The Income.
+def add_income():
+    print("-----------------------------------------")
+    print("|\t\t\t Add Income \t\t\t\t|")
+    print("-----------------------------------------")
+    while True:
+        amount = int(input("Enter an Amount: "))
+        if not 4 <= amount <= 8:
+            category = input("Enter a Category: ")
+            if category == '':
+                print("Invalid Input. Please enter a category.")
+                continue
+
+            type_input = input("Enter the type: ")
+            if type_input.lower() != "income":
+                print("Please type 'Income' for income.")
+                continue
+
+            date = input("Enter the date: ")
+            if not is_valid_date(date):
+                print("Please type the date correctly.")
+                continue
+
+            transaction = [amount, category, type_input, date]
+            transactions.append(transaction)
+            save_transactions()
+
+            choice_set = input("Transaction added successfully! Do you want to add a New Transaction? [Y/N]: ")
+            if choice_set.lower() == 'y':
+                continue
+            elif choice_set.lower() == 'n':
+                break
+            else:
+                print("Invalid Entry!! Please try again!")
+
+    # After breaking out of the loop (when choice_set is 'n'), return to the main menu
+    main_menu()
+
+
+def add_expense():
+    print("-----------------------------------------")
+    print("|\t\t\t Add Expense \t\t\t\t|")
+    print("-----------------------------------------")
+    while True:
+        amount = int(input("Enter an Amount: "))
+        if not 4 <= amount <= 8:
+            category = input("Enter a Category: ")
+            if category == '':
+                print("Invalid Input. Please enter a category.")
+                continue
+
+            type_input = input("Enter the type: ")
+            if type_input.lower() != "expense":
+                print("Please type 'Expense' for income.")
+                continue
+
+            date = input("Enter the date: ")
+            if not is_valid_date(date):
+                print("Please type the date correctly.")
+                continue
+
+            transaction = [amount, category, type_input, date]
+            transactions.append(transaction)
+            save_transactions()
+
+            choice_set = input("Transaction added successfully! Do you want to add a New Transaction? [Y/N]: ")
+            if choice_set.lower() == 'y':
+                continue
+            elif choice_set.lower() == 'n':
+                break
+            else:
+                print("Invalid Entry!! Please try again!")
+
+    # After breaking out of the loop (when choice_set is 'n'), return to the main menu
+    main_menu()
 
 
 def view_transactions():
-    pass
+    print("-----------------------------------------")
+    print("|\t\t\t View Transactions \t\t\t|")
+    print("-----------------------------------------")
 
 
 def update_transaction():
