@@ -20,13 +20,14 @@ def load_transactions():
         trans_data = []
 
     for x in trans_data:
+        transactions.append(trans_data)
         print(x)
 
 
 # Save the transactions
 def save_transactions():
     # write the data in the json file
-    with open("Data.json", "w") as f:
+    with open("Data.json", "w+") as f:
         json.dump(transactions, f, default=str, indent=2)  # getting the string for default and indentation in 2.
 
 
@@ -69,7 +70,7 @@ def add_income():
     print("-----------------------------------------")
     while True:
         amount = int(input("Enter an Amount: "))
-        if not 4 <= amount <= 8:
+        if amount != '':
             category = input("Enter a Category: ")
             if category == '':
                 print("Invalid Input. Please enter a category.")
@@ -89,6 +90,7 @@ def add_income():
             transactions.append(transaction)
             save_transactions()
 
+            # select the choice the adding the transaction or going to the main menu
             choice_set = input("Transaction added successfully! Do you want to add a New Transaction? [Y/N]: ")
             if choice_set.lower() == 'y':
                 continue
@@ -107,7 +109,7 @@ def add_expense():
     print("-----------------------------------------")
     while True:
         amount = int(input("Enter an Amount: "))
-        if not 4 <= amount <= 8:
+        if amount != '':
             category = input("Enter a Category: ")
             if category == '':
                 print("Invalid Input. Please enter a category.")
@@ -127,6 +129,7 @@ def add_expense():
             transactions.append(transaction)
             save_transactions()
 
+            # select the choice the adding the transaction or going to the main menu
             choice_set = input("Transaction added successfully! Do you want to add a New Transaction? [Y/N]: ")
             if choice_set.lower() == 'y':
                 continue
@@ -139,6 +142,7 @@ def add_expense():
     main_menu()
 
 
+# Show all transactions (main)
 def view_transactions():
     while True:
         print("-----------------------------------------")
@@ -159,18 +163,23 @@ def view_transactions():
         main_menu()
 
 
+# Only View the transactions in income
 def view_income_transactions():
     print("-------------------------------------------------")
     print("|\t\t  View Income Transactions  \t\t\t|")
     print("-------------------------------------------------")
     for transaction in transactions:
-        if transaction[2].lower() == "income":
-            print("Amount:", transaction[0])
-            print("Category:", transaction[1])
-            print("Date:", transaction[3])
-            print("-----------------------------------------")
+        try:
+            if transaction[2].lower() == "income":
+                print("Amount:", transaction[0])
+                print("Category:", transaction[1])
+                print("Date:", transaction[3])
+                print("-----------------------------------------")
+        except IndexError:
+            return False
 
 
+# Only View the transactions in expense
 def view_expense_transactions():
     print("------------------------------------------------")
     print("|\t\t\t View Expense Transactions \t\t|")
@@ -183,10 +192,11 @@ def view_expense_transactions():
             print("-----------------------------------------")
 
 
+# Update Transactions (main)
 def update_transaction():
     while True:
         print("-----------------------------------------")
-        print("|\t\t\t View Transactions \t\t\t|")
+        print("|\t\t\t Update Transactions \t\t\t|")
         print("-----------------------------------------")
         print("1. Update Income Transactions")
         print("2. Update Expense Transactions")
@@ -204,23 +214,32 @@ def update_transaction():
 
 
 def update_income_transactions():
-    pass
+    print("-------------------------------------------------")
+    print("|\t\t\t Update Income Transactions \t\t\t|")
+    print("-------------------------------------------------")
+    view_income_transactions()
 
 
 def update_expense_transactions():
-    pass
+    print("-------------------------------------------------")
+    print("|\t\t\t Update Expense Transactions \t\t\t|")
+    print("-------------------------------------------------")
+    view_expense_transactions()
 
 
+# Delete Transactions
 def delete_transaction():
     pass
 
 
+# Display All Summary
 def display_summary():
     pass
 
 
+# Main Menu
 def main_menu():
-    load_transactions()  # Move the load_transactions() call outside the loop
+    load_transactions()
     while True:
         print("-----------------------------------------")
         print("|\t\t Personal Finance Tracker \t\t|")
@@ -245,10 +264,11 @@ def main_menu():
             display_summary()
         elif choice == '6':
             print("Exiting program.")
-            exit(0)  # exiting the program
+            exit(0)  # exiting the program (using exit method)
         else:
             print("Invalid choice. Please try again.")
 
 
+# Runnable Main Constructor
 if __name__ == "__main__":
     main_menu()
