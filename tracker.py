@@ -160,9 +160,9 @@ def view_transactions():
 
 
 def view_income_transactions():
-    print("------------------------------------------------")
-    print("|\t\t\t View Income Transactions \t\t|")
-    print("------------------------------------------------")
+    print("-------------------------------------------------")
+    print("|\t\t  View Income Transactions  \t\t\t|")
+    print("-------------------------------------------------")
     for transaction in transactions:
         if transaction[2].lower() == "income":
             print("Amount:", transaction[0])
@@ -184,21 +184,23 @@ def view_expense_transactions():
 
 
 def update_transaction():
-    print("-----------------------------------------")
-    print("|\t\t\t View Transactions \t\t\t|")
-    print("-----------------------------------------")
-    print("1. Update Income Transactions")
-    print("2. Update Expense Transactions")
-    print("3. Back to main menu")
-    choice = input("Enter the choice: ")
-    if choice == "1":
-        update_income_transactions()
-    elif choice == "2":
-        update_expense_transactions()
-    elif choice == "3":
-        main_menu()
-    else:
-        print("Invalid choice. Please try again.")
+    while True:
+        print("-----------------------------------------")
+        print("|\t\t\t View Transactions \t\t\t|")
+        print("-----------------------------------------")
+        print("1. Update Income Transactions")
+        print("2. Update Expense Transactions")
+        print("3. Back to main menu")
+        choice = input("Enter the choice: ")
+        if choice == "1":
+            update_income_transactions()
+        elif choice == "2":
+            update_expense_transactions()
+        elif choice == "3":
+            break
+        else:
+            print("Invalid choice. Please try again.")
+            main_menu()
 
 
 def update_income_transactions():
@@ -218,8 +220,8 @@ def display_summary():
 
 
 def main_menu():
+    load_transactions()  # Move the load_transactions() call outside the loop
     while True:
-        load_transactions()
         print("-----------------------------------------")
         print("|\t\t Personal Finance Tracker \t\t|")
         print("-----------------------------------------")
@@ -243,7 +245,7 @@ def main_menu():
             display_summary()
         elif choice == '6':
             print("Exiting program.")
-            break
+            exit(0)  # exiting the program
         else:
             print("Invalid choice. Please try again.")
 
