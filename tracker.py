@@ -88,9 +88,12 @@ def add_transaction():
             date = input("Enter the Date: ")
 
     # adding the transactions
+    # len(transactions + 1) means the increase by 1 for the length of the list,
     add = [len(transactions) + 1, amount, category, type_input, date]
     transactions.append(add)
     save_transactions()
+
+    # choices
     choice = input("Transaction Completed. Do you want to add the another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         add_transaction()
@@ -161,20 +164,25 @@ def update_transaction():
             # But if you entered the input, It assigns the value.
             # Others are Same Manner.
             amount = int(input("Enter the new Amount:") or tran_update[1])
+            # Update the category of the transaction with the new value
             transactions[id - 1][1] = amount
             break
+
         elif choice == "2":
             category = input("Enter the new category:") or tran_update[2]
             transactions[id - 1][2] = category
             break
+
         elif choice == "3":
             trans_type = input("Enter the new type:").capitalize() or tran_update[3]
             transactions[id - 1][3] = trans_type
             break
+
         elif choice == "4":
             date = input("Enter the new date:") or tran_update[4]
             transactions[id - 1][4] = date
             break
+
         elif choice == "5":
             print("Update is canceled.")
             break
@@ -269,7 +277,6 @@ def main_menu():
             exit_the_program()
         else:
             print("Invalid choice. Please try again.")
-
 
 
 # Exiting the program
