@@ -1,6 +1,5 @@
 # import the json and os module
 import json
-import os
 
 # import the datetime module
 from datetime import datetime
@@ -33,7 +32,7 @@ def load_transactions():
 def save_transactions():
     # write the data in the json file
     with open("data.json", "w") as file:
-        json.dump(transactions, file, indent=2)  # getting the string for default and indentation in 2.
+        json.dump(transactions, file)  # getting the string for default and indentation in 2.
 
 
 # Validations
@@ -53,11 +52,38 @@ def add_transaction():
     print("|\t\t Add Transaction \t\t|")
     print("---------------------------------")
 
-    # user inputs
-    amount = int(input("enter the amount: "))
+    # user inputs with validation
+    while True:
+        try:
+            amount = int(input("Enter the amount: "))
+            if amount <= 0:
+                print("Amount must be greater than zero.")
+                continue
+            break
+        except ValueError:
+            print("Invalid input. Please enter a valid amount.")
+
     category = input("Enter the category: ")
-    type_input = input("Enter the Type: ")
+
+    # Validating type input
+    while True:
+        type_input = input("Enter the Type (Income/Expense): ")
+        # it means you entered the Income, income is valid and Expense, expense is valid and other typing is not valid.
+        if type_input not in ['Income', 'Expense', 'income', 'expense']:
+            print("Invalid input. Type must be 'Income' or 'Expense'.")
+            continue
+        break
+
     date = input("Enter the Date: ")
+
+    # Validating date format
+    while True:
+        try:
+            is_valid_date(date)  # validating the date using function.
+            break
+        except ValueError:
+            print("Invalid date format. Please enter date in YYYY-MM-DD format.")
+            date = input("Enter the Date: ")
 
     # adding the transactions
     add = [len(transactions) + 1, amount, category, type_input, date]
@@ -67,7 +93,6 @@ def add_transaction():
     if choice == "y" or choice == "Y":
         add_transaction()
     elif choice == "n" or choice == "N":
-        clear_work_console()
         main_menu()
     else:
         print("Invalid Value. Please Try Again!!")
@@ -78,15 +103,21 @@ def view_transactions():
     print("---------------------------------")
     print("|\t\t View Transactions \t\t|")
     print("---------------------------------")
+    # check the Any Transactions for here.
     if not transactions:
         print("No transactions found.")
         return
 
-    print("ID  Amount  Category   Type   Date")
-    print("-" * 40)
+    # Showing the data in tabular format
+    print("-" * 60)
+    print("| {:<3} | {:>10} | {:<15} | {:<6} | {:<10} |".format("ID", "Amount", "Category", "Type", "Date"))
+    print("-" * 60)
     for trans_list in transactions:
         transaction_id, amount, category, transaction_type, date = trans_list
-        print(f"{transaction_id:2}  {amount:7.2f}  {category:10}  {transaction_type:8}  {date}")
+        print(
+            "| {:<3} | {:>10.2f} | {:<15} | {:<6} | {:<10} |".format(transaction_id, amount, category, transaction_type,
+                                                                     date))
+    print("-" * 60)
 
 
 # Update Transactions
@@ -94,6 +125,7 @@ def update_transaction():
     print("-------------------------------------")
     print("|\t\t Update Transactions \t\t|")
     print("-------------------------------------")
+    # check the existing the id for the before update process
     id = int(input("Enter the transaction Id: "))
     if id < 1 or id > len(transactions):
         print("ID is not valid. Please Try again.")
@@ -108,6 +140,7 @@ def update_transaction():
     except IndexError:
         print("List index Out of range")
 
+    # list menu
     print("\nWhat do you want to update?")
     print("1. Update the Amount")
     print("2. Update the Category")
@@ -119,6 +152,9 @@ def update_transaction():
     # Update selected field
     while True:
         if choice == "1":
+            # If the user input is empty, It retrieved the data in the selected transaction.
+            # But if you entered the input, It assigns the value.
+            # Others are Same Manner.
             amount = int(input("Enter the new Amount:") or tran_update[1])
             transactions[id - 1][1] = amount
             break
@@ -141,12 +177,11 @@ def update_transaction():
             print("Invalid choice. Please Try Again!!")
             choice = input("Enter the number of the field you want to update: ")
 
-    save_transactions()
+    save_transactions()  # save the transactions
     choice = input("Update is Completed. Do you want to update the another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         update_transaction()
     elif choice == "n" or choice == "N":
-        clear_work_console()
         main_menu()
     else:
         print("Invalid Value. Please Try Again!!")
@@ -175,11 +210,11 @@ def delete_transaction():
         return
 
     save_transactions()
-    choice = input(f"{trans_delete} deletion is Completed. Do you want to update another Transaction? [Y/N]:")
+    # select the choice for the
+    choice = input("Transaction deletion is Completed. Do you want to update another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         delete_transaction()  # Recursively call delete_transaction()
     elif choice == "n" or choice == "N":
-        clear_work_console()  # Clear console
         main_menu()  # Return to main menu
     else:
         print("Invalid Value. Please Try Again!!")
@@ -187,11 +222,17 @@ def delete_transaction():
 
 # Display All Summary
 def display_summary():
-    total_income = sum(trans[0] for trans in transactions if trans[2] == "Income")
-    total_expense = sum(trans[0] for trans in transactions if trans[2] == "Expense")
-    print(f"Total Income: {total_income}")
-    print(f"Total Expense: {total_expense}")
-    print(f"Net Balance: {total_income - total_expense}")
+    print("---------------------------------")
+    print("|\t\t Display Summary \t\t|")
+    print("---------------------------------")
+
+    income = sum(transaction[1] for transaction in transactions if transaction[3] == "income")
+    expenses = sum(transaction[1] for transaction in transactions if transaction[3] == "expense")
+    net_balance = income - expenses
+
+    print(f"Total Income: {income:,.2f}")
+    print(f"Total Expenses: {expenses:,.2f}")
+    print(f"Net Balance: {net_balance:,.2f}")
 
 
 # Main Menu
@@ -225,24 +266,20 @@ def main_menu():
             print("Invalid choice. Please try again.")
 
 
+# print("\n")
+
+
 # Exiting the program
 def exit_the_program():
     choice = input("Did you want to exit the System? [Y/N]: ")
     if choice == "y" or choice == "Y":
         print("Program Exited")
-        clear_work_console()
         exit()
     elif choice == "n" or choice == "N":
         main_menu()
     else:
         print("Invalid Input.")
         exit(0)
-
-
-# Clearing the console
-def clear_work_console():
-    var = lambda: os.system('cls')
-    var()
 
 
 # Runnable Main Constructor
