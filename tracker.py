@@ -149,6 +149,8 @@ def update_transaction():
     print("3. Update the Type")
     print("4. Update the Date")
     print("5. Cancel")
+
+    # Enter the choice of the update wanted
     choice = input("Enter the number of the field you want to update: ")
 
     # Update selected field
