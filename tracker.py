@@ -3,9 +3,6 @@
 # import the json and os module
 import json
 
-# import the datetime module
-from datetime import datetime
-
 # Global List
 transactions = []
 
@@ -42,10 +39,21 @@ def save_transactions():
 # Date Validation
 def is_valid_date(date):
     try:
-        datetime.strptime(date, '%Y-%m-%d')  # formatting the date
+        year, month, day = map(int, date.split('-'))  # Split the date string and convert parts to integers
+        if month < 1 or month > 12 or day < 1 or day > 31:
+            return False  # Invalid month or day
+        # Check for months with 30 days
+        if month in [4, 6, 9, 11] and day > 30:
+            return False
+        # Check for February
+        if month == 2:
+            if day > 29:
+                return False  # February cannot have more than 29 days
+            if day == 29 and not (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)):
+                return False  # Not a leap year
         return True
     except ValueError:
-        return False
+        return False  # Invalid date format or cannot convert to integers
 
 
 # add the transactions (main function)
@@ -72,7 +80,7 @@ def add_transaction():
         type_input = input("Enter the Type (Income/Expense): ")
         # it means you entered the Income, income is valid and Expense, expense is valid and other typing is not valid.
         if type_input not in ['Income', 'Expense', 'income', 'expense']:
-            print("Invalid input. Type must be 'Income' or 'Expense'.")
+            print("Invalid input. Please type the valid transaction type")
             continue
         break
 
@@ -88,7 +96,7 @@ def add_transaction():
             date = input("Enter the Date: ")
 
     # adding the transactions
-    # len(transactions + 1) means the increase by 1 for the length of the list,
+    # len(transactions + 1) means the increase by 1 for the length of the list.
     add = [len(transactions) + 1, amount, category, type_input, date]
     transactions.append(add)
     save_transactions()
@@ -108,6 +116,7 @@ def view_transactions():
     print("---------------------------------")
     print("|\t\t View Transactions \t\t|")
     print("---------------------------------")
+
     # check the Any Transactions for here.
     if not transactions:
         print("No transactions found.")
@@ -223,7 +232,7 @@ def delete_transaction():
         return
 
     save_transactions()
-    # select the choice for the
+    # select the choice for the deleting process or return to the main menu
     choice = input("Transaction deletion is Completed. Do you want to update another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         delete_transaction()  # Recursively call delete_transaction()
@@ -231,6 +240,7 @@ def delete_transaction():
         main_menu()  # Return to main menu
     else:
         print("Invalid Value. Please Try Again!!")
+        main_menu()
 
 
 # Display All Summary
@@ -239,17 +249,21 @@ def display_summary():
     print("|\t\t Display Summary \t\t|")
     print("---------------------------------")
 
+    # sum all transactions in the income
     income = sum(transaction[1] for transaction in transactions if transaction[3] == "income")
-    expenses = sum(transaction[1] for transaction in transactions if transaction[3] == "expense")
-    net_balance = income - expenses
+    # sum all transactions in the expense
+    expense = sum(transaction[1] for transaction in transactions if transaction[3] == "expense")
+    # the net balance of all incomes and expenses (difference of all incomes and expenses)
+    net_balance = income - expense
 
     print(f"Total Income: {income:,.2f}")
-    print(f"Total Expenses: {expenses:,.2f}")
+    print(f"Total Expenses: {expense:,.2f}")
     print(f"Net Balance: {net_balance:,.2f}")
 
 
 # Main Menu
 def main_menu():
+    # load all transactions in the json file
     load_transactions()
     while True:
         print("-----------------------------------------")
