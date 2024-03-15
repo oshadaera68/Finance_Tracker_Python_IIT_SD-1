@@ -111,15 +111,15 @@ def view_transactions():
         return
 
     # Showing the data in tabular format
-    print("-" * 60)
-    print("| {:<3} | {:>10} | {:<15} | {:<6} | {:<10} |".format("ID", "Amount", "Category", "Type", "Date"))
-    print("-" * 60)
+    print("-" * 63)
+    print("| {:<3} | {:>10} | {:<15} | {:<8} | {:<11} |".format("ID", "Amount", "Category", "Type", "Date"))
+    print("-" * 63)
     for trans_list in transactions:
         transaction_id, amount, category, transaction_type, date = trans_list
         print(
-            "| {:<3} | {:>10.2f} | {:<15} | {:<6} | {:<10} |".format(transaction_id, amount, category, transaction_type,
+            "| {:<3} | {:>10.2f} | {:<15} | {:<8} | {:<11} |".format(transaction_id, amount, category, transaction_type,
                                                                      date))
-    print("-" * 60)
+    print("-" * 63)
 
 
 # Update Transactions
@@ -133,6 +133,7 @@ def update_transaction():
         print("ID is not valid. Please Try again.")
         return
 
+    # Get the transaction to be updated
     tran_update = transactions[id - 1]
 
     # exception handling
@@ -197,12 +198,12 @@ def delete_transaction():
     print("-------------------------------------")
     print("|\t\t Delete Transactions \t\t|")
     print("-------------------------------------")
-    id = int(input("Enter the transaction id for delete: "))
+    trans_id = int(input("Enter the transaction id for delete: "))
     index = 0
     found = False
 
     while index < len(transactions):
-        if transactions[index][0] == id:
+        if transactions[index][0] == trans_id:
             trans_delete = transactions.pop(index)
             found = True
             break
