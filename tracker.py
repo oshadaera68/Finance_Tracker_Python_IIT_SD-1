@@ -1,4 +1,4 @@
-# Personal Tracker Program
+# Personal Tracker Program by using python
 
 # import the json and os module
 import json
@@ -270,8 +270,6 @@ def main_menu():
         else:
             print("Invalid choice. Please try again.")
 
-
-# print("\n")
 
 
 # Exiting the program
