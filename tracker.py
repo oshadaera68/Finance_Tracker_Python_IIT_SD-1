@@ -21,7 +21,7 @@ def load_transactions():
         trans_data = []
 
     transactions.clear()
-    transactions.extend(trans_data) # extending the data
+    transactions.extend(trans_data)  # extending the data
 
     for data in transactions:
         print(data)
@@ -125,15 +125,15 @@ def view_transactions():
         return
 
     # Showing the data in tabular format
-    print("-" * 64)
+    print("-" * 65)
     print("| {:<4} | {:>10} | {:<15} | {:<9} | {:<11} |".format("ID", "Amount", "Category", "Type", "Date"))
-    print("-" * 64)
+    print("-" * 65)
     for trans_list in transactions:
-        transaction_id, amount, category, transaction_type, date = trans_list
+        trans_id, amount, category, trans_type, date = trans_list
         print(
-            "| {:<4} | {:>10.2f} | {:<15} | {:<9} | {:<11} |".format(transaction_id, amount, category, transaction_type,
+            "| {:<4} | {:>10.2f} | {:<15} | {:<9} | {:<11} |".format(trans_id, amount, category, trans_type,
                                                                      date))
-    print("-" * 64)
+    print("-" * 65)
 
 
 # Update Transactions
@@ -141,23 +141,25 @@ def update_transaction():
     print("-------------------------------------")
     print("|\t\t Update Transactions \t\t|")
     print("-------------------------------------")
-    # check the existing the id for the before update process
-    id = int(input("Enter the transaction Id: "))
-    if id < 1 or id > len(transactions):
-        print("ID is not valid. Please Try again.")
+
+    # Check if there are transactions available
+    if not transactions:
+        print("No transactions available to update.")
+        return
+
+    # check the existing the id for the before update process (Search Part)
+    trans_id = int(input("Enter the transaction Id: "))
+    if trans_id < 1 or trans_id > len(transactions):
+        print("ID is not valid. Please try again.")
         return
 
     # Get the transaction to be updated
-    tran_update = transactions[id - 1]
+    trans_update = transactions[trans_id - 1]
 
-    # exception handling
-    try:
-        # print the selected transaction
-        print(f"{tran_update[0]}  {tran_update[1]}  {tran_update[2]}  {tran_update[3]}  {tran_update[4]}")
-    except IndexError:
-        print("List index Out of range")
+    # Print the selected transaction
+    print(f"Transaction Details: {trans_update}")
 
-    # list menu
+    # List menu for updating fields
     print("\nWhat do you want to update?")
     print("1. Update the Amount")
     print("2. Update the Category")
@@ -171,41 +173,53 @@ def update_transaction():
     # Update selected field
     while True:
         if choice == "1":
-            # If the user input is empty, It retrieved the data in the selected transaction.
-            # But if you entered the input, It assigns the value.
-            # Others are Same Manner.
-            amount = int(input("Enter the new Amount:") or tran_update[1])
-            # Update the category of the transaction with the new value
-            transactions[id - 1][1] = amount
+            # Validate amount input
+            while True:
+                try:
+                    amount = int(input("Enter the new Amount: "))
+                    if amount < 0:
+                        print("Amount must be a positive integer.")
+                    else:
+                        break
+                except ValueError:
+                    print("Invalid input. Please enter a valid integer.")
+
+            transactions[trans_id - 1][1] = amount
             break
 
         elif choice == "2":
-            category = input("Enter the new category:") or tran_update[2]
-            transactions[id - 1][2] = category
+            category = input("Enter the new category: ")
+            transactions[trans_id - 1][2] = category
             break
 
         elif choice == "3":
-            trans_type = input("Enter the new type:").capitalize() or tran_update[3]
-            transactions[id - 1][3] = trans_type
+            trans_type = input("Enter the new type: ").capitalize()
+            transactions[trans_id - 1][3] = trans_type
             break
 
         elif choice == "4":
-            date = input("Enter the new date:") or tran_update[4]
-            transactions[id - 1][4] = date
-            break
+            date = input("Enter the new date (YYYY-MM-DD): ")
+            # Validate date input
+            if not is_valid_date(date):
+                print("Invalid date format. Please use YYYY-MM-DD.")
+            else:
+                transactions[trans_id - 1][4] = date
+                break
 
         elif choice == "5":
             print("Update is canceled.")
             break
         else:
-            print("Invalid choice. Please Try Again!!")
+            print("Invalid choice. Please try again.")
             choice = input("Enter the number of the field you want to update: ")
 
-    save_transactions()  # save the transactions
-    choice = input("Update is Completed. Do you want to update the another Transaction? [Y/N]:")
-    if choice == "y" or choice == "Y":
+    save_transactions()  # Save the transactions
+
+    # Ask if user wants to update another transaction
+    choice = input("Update is Completed. Do you want to update another Transaction? [Y/N]: ")
+    if choice.lower() == "y":
         update_transaction()
-    elif choice == "n" or choice == "N":
+    elif choice.lower() == "n":
         main_menu()
     else:
         print("Invalid Value. Please Try Again!!")
@@ -221,6 +235,7 @@ def delete_transaction():
     index = 0
     found = False
 
+    # delete process
     while index < len(transactions):
         if transactions[index][0] == trans_id:
             trans_delete = transactions.pop(index)
