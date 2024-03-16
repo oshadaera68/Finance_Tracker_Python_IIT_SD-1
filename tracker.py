@@ -1,6 +1,6 @@
 # Personal Tracker Program by using python
 
-# import the json and os module
+# import the json module
 import json
 
 # Global List
@@ -21,7 +21,7 @@ def load_transactions():
         trans_data = []
 
     transactions.clear()
-    transactions.extend(trans_data)
+    transactions.extend(trans_data) # extending the data
 
     for data in transactions:
         print(data)
@@ -66,6 +66,7 @@ def add_transaction():
     while True:
         try:
             amount = int(input("Enter the amount: "))
+            # check the amount less than zero
             if amount <= 0:
                 print("Amount must be greater than zero.")
                 continue
@@ -78,7 +79,8 @@ def add_transaction():
     # Validating type input
     while True:
         type_input = input("Enter the Type (Income/Expense): ")
-        # it means you entered the Income, income is valid and Expense, expense is valid and other typing is not valid.
+        # it means you entered the Income, income is valid and Expense, expense is valid and
+        # other typing is not valid. (ex:- ejrejrijeir)
         if type_input not in ['Income', 'Expense', 'income', 'expense']:
             print("Invalid input. Please type the valid transaction type")
             continue
@@ -123,15 +125,15 @@ def view_transactions():
         return
 
     # Showing the data in tabular format
-    print("-" * 63)
-    print("| {:<3} | {:>10} | {:<15} | {:<8} | {:<11} |".format("ID", "Amount", "Category", "Type", "Date"))
+    print("-" * 64)
+    print("| {:<4} | {:>10} | {:<15} | {:<9} | {:<11} |".format("ID", "Amount", "Category", "Type", "Date"))
     print("-" * 63)
     for trans_list in transactions:
         transaction_id, amount, category, transaction_type, date = trans_list
         print(
-            "| {:<3} | {:>10.2f} | {:<15} | {:<8} | {:<11} |".format(transaction_id, amount, category, transaction_type,
+            "| {:<4} | {:>10.2f} | {:<15} | {:<9} | {:<11} |".format(transaction_id, amount, category, transaction_type,
                                                                      date))
-    print("-" * 63)
+    print("-" * 64)
 
 
 # Update Transactions
