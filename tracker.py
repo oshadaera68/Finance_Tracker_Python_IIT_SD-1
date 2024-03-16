@@ -127,7 +127,7 @@ def view_transactions():
     # Showing the data in tabular format
     print("-" * 64)
     print("| {:<4} | {:>10} | {:<15} | {:<9} | {:<11} |".format("ID", "Amount", "Category", "Type", "Date"))
-    print("-" * 63)
+    print("-" * 64)
     for trans_list in transactions:
         transaction_id, amount, category, transaction_type, date = trans_list
         print(
