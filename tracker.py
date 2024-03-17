@@ -176,6 +176,7 @@ def update_transaction():
             # Validate amount input
             while True:
                 try:
+                    print(f"current Amount:{trans_update[1]}")
                     amount = int(input("Enter the new Amount: "))
                     if amount < 0:
                         print("Amount must be a positive integer.")
@@ -188,16 +189,19 @@ def update_transaction():
             break
 
         elif choice == "2":
+            print(f"current Amount:{trans_update[2]}")
             category = input("Enter the new category: ")
             transactions[trans_id - 1][2] = category
             break
 
         elif choice == "3":
-            trans_type = input("Enter the new type: ").capitalize()
+            print(f"current Amount:{trans_update[3]}")
+            trans_type = input("Enter the new type: ")
             transactions[trans_id - 1][3] = trans_type
             break
 
         elif choice == "4":
+            print(f"current date:{trans_update[4]}")
             date = input("Enter the new date (YYYY-MM-DD): ")
             # Validate date input
             if not is_valid_date(date):
@@ -215,11 +219,11 @@ def update_transaction():
 
     save_transactions()  # Save the transactions
 
-    # Ask if user wants to update another transaction
+    # select the choice for the update process or return to the main menu
     choice = input("Update is Completed. Do you want to update another Transaction? [Y/N]: ")
-    if choice.lower() == "y":
+    if choice == "y" or choice == "Y":
         update_transaction()
-    elif choice.lower() == "n":
+    elif choice == "n" or choice == "N":
         main_menu()
     else:
         print("Invalid Value. Please Try Again!!")
@@ -249,7 +253,7 @@ def delete_transaction():
         return
 
     save_transactions()
-    # select the choice for the deleting process or return to the main menu
+    # select the choice for the delete process or return to the main menu
     choice = input("Transaction deletion is Completed. Do you want to update another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         delete_transaction()  # Recursively call delete_transaction()
@@ -266,9 +270,8 @@ def display_summary():
     print("|\t\t Display Summary \t\t|")
     print("---------------------------------")
 
-    # sum all transactions in the income
+    # sum all transactions in the income and expense
     income = sum(transaction[1] for transaction in transactions if transaction[3] == "income")
-    # sum all transactions in the expense
     expense = sum(transaction[1] for transaction in transactions if transaction[3] == "expense")
     # the net balance of all incomes and expenses (difference of all incomes and expenses)
     net_balance = income - expense
