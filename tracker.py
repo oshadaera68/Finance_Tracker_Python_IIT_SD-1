@@ -20,9 +20,6 @@ def load_transactions():
     transactions.clear()
     transactions.extend(trans_data)  # add the element in the end
 
-    for data in transactions:
-        print(data)
-
 
 # Save the transactions
 def save_transactions():
@@ -32,6 +29,8 @@ def save_transactions():
 
 
 # Validations - Date Validation
+
+
 def is_valid_date(date):
     try:
         year, month, day = map(int, date.split('-'))  # Split the date string and convert parts to integers
@@ -48,7 +47,7 @@ def is_valid_date(date):
                 return False  # Not a leap year
         return True
     except ValueError:
-        return False  # Invalid date format or cannot convert to integers
+        return False
 
 
 # add the transactions (main function)
@@ -81,16 +80,13 @@ def add_transaction():
             continue
         break
 
-    date = input("Enter the Date: ")
-
     # Validating date format
     while True:
-        try:
-            is_valid_date(date)  # validating the date using function.
-            break
-        except ValueError:
+        date = input("Enter the Date: ")
+        if not is_valid_date(date):  # validating the date using function.
             print("Invalid date format. Please enter date in YYYY-MM-DD format.")
-            date = input("Enter the Date: ")
+            continue
+        break
 
     # adding the transactions
     # len(transactions + 1) means the increase by 1 for the length of the list.
