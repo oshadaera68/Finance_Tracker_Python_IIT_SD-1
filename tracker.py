@@ -16,12 +16,9 @@ def load_transactions():
         trans_data = []
     except json.JSONDecodeError:
         trans_data = []
-    except Exception as e:
-        print(f"Error loading transactions: {e}")
-        trans_data = []
 
     transactions.clear()
-    transactions.extend(trans_data)  # extending the data
+    transactions.extend(trans_data)  # add the element in the end
 
     for data in transactions:
         print(data)
@@ -34,9 +31,7 @@ def save_transactions():
         json.dump(transactions, file)  # getting the string for default and indentation in 2.
 
 
-# Validations
-
-# Date Validation
+# Validations - Date Validation
 def is_valid_date(date):
     try:
         year, month, day = map(int, date.split('-'))  # Split the date string and convert parts to integers
