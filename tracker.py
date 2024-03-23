@@ -167,7 +167,8 @@ def update_transaction():
             # Validate amount input
             while True:
                 try:
-                    print(f"current Amount:{trans_update[1]}")
+                    # print the existing value of the selected choice
+                    print(f"current Amount: {trans_update[1]}")
                     amount = int(input("Enter the new Amount: "))
                     if amount < 0:
                         print("Amount must be a positive integer.")
@@ -176,28 +177,37 @@ def update_transaction():
                 except ValueError:
                     print("Invalid input. Please enter a valid integer.")
 
+            # update the value for existing value
             transactions[trans_id - 1][1] = amount
             break
 
         elif choice == "2":
-            print(f"current Amount:{trans_update[2]}")
+            # print the existing value of the selected choice
+            print(f"current category: {trans_update[2]}")
             category = input("Enter the new category: ")
+
+            # update the value for existing value
             transactions[trans_id - 1][2] = category
             break
 
         elif choice == "3":
-            print(f"current Amount:{trans_update[3]}")
+            # print the existing value of the selected choice
+            print(f"current transaction type: {trans_update[3]}")
             trans_type = input("Enter the new type: ")
+
+            # update the value for existing value
             transactions[trans_id - 1][3] = trans_type
             break
 
         elif choice == "4":
-            print(f"current date:{trans_update[4]}")
+            # print the existing value of the selected choice
+            print(f"current date: {trans_update[4]}")
             date = input("Enter the new date (YYYY-MM-DD): ")
             # Validate date input
             if not is_valid_date(date):
                 print("Invalid date format. Please use YYYY-MM-DD.")
             else:
+                # update the value for existing value
                 transactions[trans_id - 1][4] = date
                 break
 
@@ -232,8 +242,8 @@ def delete_transaction():
 
     # delete process
     while index < len(transactions):
-        if transactions[index][0] == trans_id:
-            trans_delete = transactions.pop(index)
+        if transactions[index][0] == trans_id:  # check the list id equal for the user inputted id.
+            trans_delete = transactions.pop(index)  # removing the selected list
             found = True
             break
         else:
@@ -245,7 +255,7 @@ def delete_transaction():
 
     save_transactions()
     # select the choice for the delete process or return to the main menu
-    choice = input("Transaction deletion is Completed. Do you want to update another Transaction? [Y/N]:")
+    choice = input("Transaction deletion is Completed. Do you want to delete another Transaction? [Y/N]:")
     if choice == "y" or choice == "Y":
         delete_transaction()  # Recursively call delete_transaction()
     elif choice == "n" or choice == "N":
